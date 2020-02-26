@@ -516,9 +516,11 @@ clipboard.readText().then(console.log, console.error);
 	}, view, $content);
 
 	proc.on('destroy', () => {
-		
-//		alert("Destroying");
+	    setTimeout(() => {
 		win.destroy();
+    	},1000);		
+//		alert("Destroying");
+
 	//	basic.destroy();
 	});
 
