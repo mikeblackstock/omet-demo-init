@@ -1,0 +1,22 @@
+{
+  "type": "application",
+  "name": "Boot",
+  "category": "development",
+  "server": "server.js",
+  "icon": "icon.png",
+  "singleton": true,
+  "autostart":true,
+  "title": {
+    "en_EN": "Boot"
+  },
+  "description": {
+    "en_EN": "Boot"
+  },
+  "files": [
+    "main.js",
+    "main.css"
+  ],
+  "mimes": [
+    "text\/x-lilypond"
+  ]
+}
