@@ -27,27 +27,11 @@ const createEditorInterface = (core, proc, win, $content) => {
 	const contextmenu = core.make('osjs/contextmenu').show;
 	const basic = core.make('osjs/basic-application', proc, win, {
 
-		defaultFilename: 'Default.ly'
+		defaultFilename: ''
 	});
 
 	// const setText = contents => editor.setValue(contents); 
-	const setText = function(contents, path) {
-		editor.setValue(contents);
-		editor.navigateFileStart();
 
-		win.setTitle(path);
-	};
-
-	const setSavedTitle = function(path) {
-		win.setTitle("Saved");
-		setTimeout(() => {
-			win.setTitle(path);
-		}, 1000);
-	};
-	const {icon} = core.make('osjs/theme');
-	const getText = () => editor.getValue();
-
-//	const yell=  yellAtMike(h, state, actions);
 
 
 
@@ -70,16 +54,14 @@ const createEditorInterface = (core, proc, win, $content) => {
 
 
 	}, " Initialising...", $content);
-
+/*
 	proc.on('destroy', () => {
 	    setTimeout(() => {
 		win.destroy();
     	},1000);		
-//		alert("Destroying");
 
-	//	basic.destroy();
 	});
-
+*/
 	proc.on('setTmpID', (userID) => {
 		tmpID = userID;
 		snippet = {
@@ -89,28 +71,8 @@ const createEditorInterface = (core, proc, win, $content) => {
 
 
 	});
-	proc.on('loadDefault', () => {
-		vfs.readfile(snippet)
-				.then(contents => setText(contents, snippet.path))
-				.catch(error => console.error(error)); // FIXME: Dialog
-	});
-	proc.on('lilypond:compile:log', (type, string) => {
-		hyperapp.appendLog(`[${type}] ${string}`);
-	});
 
-	proc.on('lilypond:compile:success', file => {
-//		proc.emit('lilypond:open-result', file);
 
-		hyperapp.appendLog('*** COMPILATION SUCCESSFUL ***');
-		setTimeout(() => {
-			hyperapp.toggleLog(false);
-		}, 5000);
-	});
-
-	proc.on('lilypond:compile:error', (error) => {
-		hyperapp.appendLog('*** FAILED TO COMPILE ***');
-		hyperapp.appendLog(error);
-	});
 
 
 	proc.on('attention', (args) => {
@@ -148,23 +110,23 @@ console.log(args.file.path);
 	win.on('blur', () => editor.blur());
 //	win.on('focus', () => editor.focus());
 
-	if (window.mobile === true) 
-			win.maximize();
+//	if (window.mobile === true) 
+//			win.maximize();
 
 	return hyperapp;
 };
 
-export const createEditorWindow = (core, proc) =>
+export const createBootWindow = (core, proc) =>
 	proc.createWindow({
 		id: 'BootWindow',
 		title: proc.metadata.title.en_EN,
 		icon: proc.resource(proc.metadata.icon),
 		//a bit bigger
 		dimension: {
-			width: 400,
-			height: 500
+			width: 200,
+			height: 100
 		},
-		position: 'center'
+		position: 'topright'
 	})
 	.on('destroy', () => proc.destroy())
 	.render(($content, win) => {

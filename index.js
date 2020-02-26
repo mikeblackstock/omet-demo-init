@@ -1,6 +1,6 @@
 import osjs from 'osjs';
 import {name as applicationName} from './metadata.json';
-import {createEditorWindow} from './src/editor-window.js';
+import {createBootWindow} from './src/boot-window.js';
 
 
 const register = (core, args, options, metadata) => {
@@ -28,7 +28,7 @@ let userID= "demo";
     args
   }));
 
-  createEditorWindow(core, proc);
+  createBootWindow(core, proc);
  
   sendMessage("init", "demo", "");
   
