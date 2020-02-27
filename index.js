@@ -1,6 +1,6 @@
 import osjs from 'osjs';
 import {name as applicationName} from './metadata.json';
-import {createBootWindow} from './src/boot-window.js';
+import {createInitWindow} from './src/init-window.js';
 
 
 const register = (core, args, options, metadata) => {
@@ -22,7 +22,15 @@ const getCookie = (name) => {
   return matches ? decodeURIComponent(matches[1]) : undefined;
 };
 
-  createBootWindow(core, proc);
+
+const notify= (msg) => {
+core.make('osjs/notification', {
+  message: msg,
+//  icon: 'icon.src',
+  onclick: () => console.log('Clicked!')
+});	
+};
+
  
 	
  
@@ -37,13 +45,13 @@ const getCookie = (name) => {
 	}  	
 
 	if (args[0].search("rsync:") !== -1) {
-		
+//		CB after folder cretion etc
 		if (getCookie('ometID')) {
-			console.log("COOKIE\n");
-		
 			console.log(getCookie('ometID'));
+			
 		}
-
+		notify(getCookie('ometID'));
+		proc.emit('destroy');
 	}
 
 //init stuff
@@ -51,7 +59,8 @@ const getCookie = (name) => {
 		userID= args[0].split(":")[1];
 		if (!getCookie('ometID')) 
 			document.cookie="ometID=" + userID;
-		proc.emit('setTmpID', userID);	
+
+		// create folder etc
 		sendMessage("rsync", userID, "");
 		
 	}	

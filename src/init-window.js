@@ -19,7 +19,7 @@ let tmpID = '';
 
 
 
-const createBootInterface = (core, proc, win, $content) => {
+const createInitInterface = (core, proc, win, $content) => {
 
 	const _ = core.make('osjs/locale').translate;
 	const vfs = core.make('osjs/vfs');
@@ -53,14 +53,14 @@ const createBootInterface = (core, proc, win, $content) => {
 
 
 	}, " Initialising...", $content);
-/*
+
 	proc.on('destroy', () => {
 	    setTimeout(() => {
 		win.destroy();
     	},1000);		
 
 	});
-*/
+
 	proc.on('setTmpID', (userID) => {
 		tmpID = userID;
 		snippet = {
@@ -86,7 +86,7 @@ const createBootInterface = (core, proc, win, $content) => {
 	return hyperapp;
 };
 
-export const createBootWindow = (core, proc) =>
+export const createInitWindow = (core, proc) =>
 	proc.createWindow({
 		id: 'BootWindow',
 		title: proc.metadata.title.en_EN,
@@ -100,6 +100,6 @@ export const createBootWindow = (core, proc) =>
 	})
 	.on('destroy', () => proc.destroy())
 	.render(($content, win) => {
-		createBootInterface(core, proc, win, $content);
+		createInitInterface(core, proc, win, $content);
   
 	});

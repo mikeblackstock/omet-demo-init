@@ -42,7 +42,7 @@ const runcmd = (core, cmd, user, respond, file) => new Promise((resolve, reject)
 	}
 
 	if (cmd === "init") {
-		var tmpID= "." + Date.now();
+		var tmpID= Date.now();
 		var tmpDIR= core.options.root + "/vfs/demo/" + tmpID;
 		
 		var p = spawn("mkdir", [tmpDIR]);
