@@ -16,12 +16,11 @@ import {
 
 let snippet = {};
 let tmpID = '';
-let zoomString = '#zoom=100';
 
 
-const createEditorInterface = (core, proc, win, $content) => {
-	let editor;
- 
+
+const createBootInterface = (core, proc, win, $content) => {
+
 	const _ = core.make('osjs/locale').translate;
 	const vfs = core.make('osjs/vfs');
 	const contextmenu = core.make('osjs/contextmenu').show;
@@ -76,42 +75,13 @@ const createEditorInterface = (core, proc, win, $content) => {
 
 
 	proc.on('attention', (args) => {
-console.log(args.file.path);
+		console.log(args.file.path);
 		snippet = args.file;
 		vfs.readfile(snippet)
 			.then(contents => setText(contents, snippet.path))
 			.catch(error => console.error(error)); // FIXME: Dialog
 	});
-	basic.on('new-file', () => {
 
-	});
-
-	basic.on('save-file', () => {
-		//   if (proc.args.file) {
-		const contents = getText();
-
-		vfs.writefile(snippet, contents)
-			//       .then(() => win.setTitle(proc.title))
-			.then(() => setSavedTitle(snippet.path))
-			.catch(error => console.error(error)); // FIXME: Dialog
-		//   }
-	});
-
-	basic.on('open-file', (file) => {
-		console.log(file);
-		vfs.readfile(file)
-			.then(contents => setText(contents, file.path))
-			.catch(error => console.error(error)); // FIXME: Dialog
-	});
-
-	basic.init();
-
-	win.on('resized', () => editor.resize());
-	win.on('blur', () => editor.blur());
-//	win.on('focus', () => editor.focus());
-
-//	if (window.mobile === true) 
-//			win.maximize();
 
 	return hyperapp;
 };
@@ -130,6 +100,6 @@ export const createBootWindow = (core, proc) =>
 	})
 	.on('destroy', () => proc.destroy())
 	.render(($content, win) => {
-		createEditorInterface(core, proc, win, $content);
+		createBootInterface(core, proc, win, $content);
   
 	});

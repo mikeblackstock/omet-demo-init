@@ -4,23 +4,10 @@ import {createBootWindow} from './src/boot-window.js';
 
 
 const register = (core, args, options, metadata) => {
-let fileObj= {};
-let pdfFileObj= {file: {}};
-let zoomString="#zoom=100";
+
 let userID= "demo";	
 
   const proc = core.make('osjs/application', {args, options, metadata});
-//  const ws = proc.socket('/socket');
-/*
-  ws.on('message', ev => {
-    const {event, args} = JSON.parse(ev.data);
-
-    console.log({event, args});
-
-    proc.emit('lilypond:' + event, ...args);
-  });
-*/
-//	proc.on('ws:message', (...args) => iframe.contentWindow.postMessage(args, window.location.href));
 
   const sendMessage = (cmd, user, ...args) => proc.send(JSON.stringify({
   	cmd,
@@ -28,7 +15,16 @@ let userID= "demo";
     args
   }));
 
+const getCookie = (name) => {
+	 let matches = document.cookie.match(new RegExp(
+    "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
+  ));
+  return matches ? decodeURIComponent(matches[1]) : undefined;
+};
+
   createBootWindow(core, proc);
+ 
+	
  
   sendMessage("init", "demo", "");
   
@@ -41,64 +37,32 @@ let userID= "demo";
 	}  	
 
 	if (args[0].search("rsync:") !== -1) {
-
-		proc.emit('destroy');
-	}
-	if (args[0].search("Success:") !== -1) { //compilation finished
-//		osjs.run('FileBrowser', 'refresh');
-
- 		fileObj.path= fileObj.path.replace('.ly', '.pdf');
- 		fileObj.filename= fileObj.filename.replace('.ly', '.pdf');
-
-//alert(fileObj.filename);
-//		fileObj.zoomString= zoomString;
-//		fileObj.zoomString= zoomString;
-// var y = Object.assign({}, x);
-		pdfFileObj.file= Object.assign({}, fileObj);
-		pdfFileObj.file.path= pdfFileObj.file.path + "?" + Date.now() + zoomString;
-		proc.emit('lilypond:compile:success');
 		
-		osjs.run('PDFViewer', pdfFileObj);
-		fileObj.path= fileObj.path.replace('.pdf', '.ly');
- 		fileObj.filename= fileObj.filename.replace('.pdf', '.ly');		
-	}  	
+		if (getCookie('ometID')) {
+			console.log("COOKIE\n");
+		
+			console.log(getCookie('ometID'));
+		}
+
+	}
+
 //init stuff
 	if (args[0].search("init:") !== -1) {
 		userID= args[0].split(":")[1];
-	
+		if (!getCookie('ometID')) 
+			document.cookie="ometID=" + userID;
 		proc.emit('setTmpID', userID);	
 		sendMessage("rsync", userID, "");
 		
 	}	
-
+	
   	
   });
   
   
  
  
-  proc.on('lilypond:compile', file => {
-  	
 
- fileObj= Object.assign({}, file);
-
-// 	const username= core.getUser().username;
- 	sendMessage("lilypond", "", file);
- //   sendMessage("lilypond", userID, file);
- 
-  });
-
-	proc.on('showZoom', () => {
-		alert(zoomString);
-	});
- 
-	proc.on('zoom', file => {
-
-		zoomString= file;
-        let tmpPath= pdfFileObj.file.path.split("?");
-        pdfFileObj.file.path=  tmpPath[0] + "?" + Date.now() + zoomString;
-        osjs.run('PDFViewer', pdfFileObj);
-	});
  
  
   return proc;
