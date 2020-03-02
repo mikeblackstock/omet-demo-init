@@ -57,7 +57,7 @@ core.make('osjs/notification', {
 //init stuff
 	if (args[0].search("init:") !== -1) {
 		userID= args[0].split(":")[1];
-		if (!getCookie('ometID')) 
+//		if (!getCookie('ometID')) 
 			document.cookie="ometID=" + userID;
 
 		// create folder etc
