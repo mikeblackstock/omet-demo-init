@@ -50,7 +50,7 @@ core.make('osjs/notification', {
 			console.log(getCookie('ometID'));
 			
 		}
-		notify(getCookie('ometID'));
+
 		proc.emit('destroy');
 	}
 

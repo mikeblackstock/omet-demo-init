@@ -6,6 +6,7 @@
   "icon": "icon.png",
   "singleton": true,
   "autostart":true,
+  "hidden":true,
   "title": {
     "en_EN": "Init"
   },
